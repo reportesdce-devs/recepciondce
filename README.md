@@ -31,15 +31,14 @@ anuncios y cumpleaños desde un Google Sheets editable.
 Si cambias el código posteriormente, usa `Implementar > Administrar
 implementaciones > Editar > Nueva versión`.
 
-## 3. Conectar el HTML
+## 3. Conexión del HTML
 
-Abre `index.html` con un editor de texto y localiza:
+El archivo `index.html` ya está conectado a esta implementación:
 
-```js
-apiUrl: "PEGA_AQUI_LA_URL_DE_APPS_SCRIPT"
-```
+`https://script.google.com/macros/s/AKfycbxxbhGRSqSyJyxVcbf_Hs0cG6bW-dkxyfiwDZW4L40rLbvSCLeR5EBcQn8T11OA96EkAw/exec`
 
-Sustituye únicamente el texto entre comillas por la URL `/exec`.
+Si creas una implementación nueva, sustituye el valor de `apiUrl` en
+`index.html` por la nueva dirección terminada en `/exec`.
 
 ## 4. Publicar en GitHub Pages
 
