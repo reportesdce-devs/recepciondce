@@ -54,6 +54,8 @@ Si creas una implementación nueva, sustituye el valor de `apiUrl` en
 
 No necesitas volver a subir el HTML cuando cambien los datos. Edita el Google
 Sheets y la HMI consultará la información nuevamente cada cinco minutos.
+El pie de la pantalla mostrará `Google Sheets conectado` y la hora de la última
+actualización cuando la API responda correctamente.
 
 ## Campos principales
 
