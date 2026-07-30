@@ -144,17 +144,13 @@ const demoData = {
     {id:"IS01",name:"Alexandro Barrón Guajardo",type:"Personal",role:"Coordinador ISND",day:6,month:12},
     {id:"IM01",name:"Josué Helí Jiménez Arteaga",type:"Personal",role:"Coordinador IM",day:26,month:12}
   ],
-  events: [
-    {id:"E001",title:"Bienvenida de Integración Universitaria",date:"2026-08-03",time:"09:00",location:"Auditorio",type:"Alumnos"},
-    {id:"E002",title:"Inducción a laboratorios",date:"2026-08-05",time:"11:00",location:"OpenLab DCE",type:"Académico"},
-    {id:"E003",title:"Reunión de coordinadores",date:"2026-08-07",time:"13:00",location:"Sala de juntas",type:"Personal"}
-  ]
+  events: []
 };
 
 let announcements = demoData.announcements;
 let birthdays = demoData.birthdays;
 let nextBirthdays = demoData.birthdayCatalog.filter(person => person.month === ((new Date().getMonth() + 1) % 12) + 1).slice(0,3);
-let events = demoData.events;
+let events = [];
 let slide = 0;
 let rotationTimer;
 const $ = id => document.getElementById(id);
@@ -377,9 +373,9 @@ function loadFromSheets() {
             .filter(person => person.month === ((new Date().getMonth() + 1) % 12) + 1)
             .sort((a,b) => Number(a.day) - Number(b.day))
             .slice(0,3);
-      events = Array.isArray(payload.events) && payload.events.length
-        ? payload.events
-        : demoData.events;
+      // Una respuesta válida de Sheets siempre manda la lista definitiva.
+      // Si está vacía, se muestra vacía; nunca se sustituyen fechas con ejemplos.
+      events = Array.isArray(payload.events) ? payload.events : [];
       renderAll();
       restartRotation();
       const updated = new Date(payload.updatedAt || Date.now());

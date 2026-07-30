@@ -73,32 +73,24 @@ function obtenerDatos_() {
     .filter(persona => persona.month === mesSiguiente)
     .slice(0, 3);
 
-  const inicioHoy = new Date(ahora);
-  inicioHoy.setHours(0, 0, 0, 0);
+  const hoyTexto = Utilities.formatDate(ahora, zonaHoraria, "yyyy-MM-dd");
   const eventos = leerObjetos_(libro.getSheetByName(HOJAS.EVENTOS))
     .filter(fila => esActivo_(fila.Activo))
     .map(fila => {
-      const fechaEvento = fecha_(fila.Fecha, false);
+      const fechaEvento = fechaTextoLocal_(fila.Fecha, zonaHoraria);
       return {
         id: texto_(fila.ID),
         title: texto_(fila.Titulo),
-        date: fechaEvento
-          ? Utilities.formatDate(fechaEvento, zonaHoraria, "yyyy-MM-dd")
-          : "",
+        date: fechaEvento,
         time: horaTexto_(fila.Hora),
         location: texto_(fila.Lugar),
         type: texto_(fila.Tipo) || "Evento",
-        dateValue: fechaEvento ? fechaEvento.getTime() : 0,
         active: true
       };
     })
-    .filter(evento => evento.title && evento.date && evento.dateValue >= inicioHoy.getTime())
-    .sort((a, b) => a.dateValue - b.dateValue)
-    .slice(0, 8)
-    .map(evento => {
-      delete evento.dateValue;
-      return evento;
-    });
+    .filter(evento => evento.title && evento.date && evento.date >= hoyTexto)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(0, 8);
 
   const configuracion = leerConfiguracion_(
     libro.getSheetByName(HOJAS.CONFIGURACION)
@@ -154,6 +146,34 @@ function fecha_(valor, finDelDia) {
   if (isNaN(fecha.getTime())) return null;
   fecha.setHours(finDelDia ? 23 : 0, finDelDia ? 59 : 0, finDelDia ? 59 : 0, 0);
   return fecha;
+}
+
+/**
+ * Conserva exactamente el día escrito en Sheets y devuelve YYYY-MM-DD.
+ * Evita que la conversión UTC cambie el día en la pantalla.
+ */
+function fechaTextoLocal_(valor, zonaHoraria) {
+  if (!valor) return "";
+
+  if (valor instanceof Date && !isNaN(valor.getTime())) {
+    return Utilities.formatDate(valor, zonaHoraria, "yyyy-MM-dd");
+  }
+
+  const texto = texto_(valor);
+  const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (iso) return iso[1] + "-" + iso[2] + "-" + iso[3];
+
+  const latino = texto.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+  if (latino) {
+    return latino[3] + "-" +
+      String(Number(latino[2])).padStart(2, "0") + "-" +
+      String(Number(latino[1])).padStart(2, "0");
+  }
+
+  const fecha = new Date(valor);
+  return isNaN(fecha.getTime())
+    ? ""
+    : Utilities.formatDate(fecha, zonaHoraria, "yyyy-MM-dd");
 }
 
 function rangoFechas_(inicio, fin) {
