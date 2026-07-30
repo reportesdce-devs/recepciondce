@@ -145,9 +145,9 @@ const demoData = {
     {id:"IM01",name:"Josué Helí Jiménez Arteaga",type:"Personal",role:"Coordinador IM",day:26,month:12}
   ],
   events: [
-    {id:"E001",title:"Bienvenida de Integración Universitaria",date:"2026-08-03T15:00:00.000Z",time:"09:00",location:"Auditorio",type:"Alumnos"},
-    {id:"E002",title:"Inducción a laboratorios",date:"2026-08-05T15:00:00.000Z",time:"11:00",location:"OpenLab DCE",type:"Académico"},
-    {id:"E003",title:"Reunión de coordinadores",date:"2026-08-07T15:00:00.000Z",time:"13:00",location:"Sala de juntas",type:"Personal"}
+    {id:"E001",title:"Bienvenida de Integración Universitaria",date:"2026-08-03",time:"09:00",location:"Auditorio",type:"Alumnos"},
+    {id:"E002",title:"Inducción a laboratorios",date:"2026-08-05",time:"11:00",location:"OpenLab DCE",type:"Académico"},
+    {id:"E003",title:"Reunión de coordinadores",date:"2026-08-07",time:"13:00",location:"Sala de juntas",type:"Personal"}
   ]
 };
 
@@ -179,6 +179,15 @@ function escapeHtml(value) {
 function visibleAnnouncementDate(value) {
   const text = safeText(value).trim();
   return /^(vigente|activo)$/i.test(text) ? "" : text;
+}
+
+function parseEventDate(value) {
+  const text = safeText(value).trim();
+  const dateOnly = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (dateOnly) {
+    return new Date(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]));
+  }
+  return new Date(text);
 }
 
 function renderAnnouncement() {
@@ -291,15 +300,15 @@ function renderEvents() {
   const now = new Date();
   const upcoming = [...events]
     .filter(event => {
-      const date = new Date(event.date);
+      const date = parseEventDate(event.date);
       return !Number.isNaN(date.getTime()) && date.getTime() >= new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     })
-    .sort((a,b) => new Date(a.date) - new Date(b.date))
+    .sort((a,b) => parseEventDate(a.date) - parseEventDate(b.date))
     .slice(0,3);
   $("eventCount").textContent = upcoming.length;
   $("eventList").innerHTML = upcoming.length
     ? upcoming.map(event => {
-      const date = new Date(event.date);
+      const date = parseEventDate(event.date);
       const day = String(date.getDate()).padStart(2,"0");
       const month = new Intl.DateTimeFormat("es-MX",{month:"short"}).format(date).replace(".","").slice(0,3);
       const startToday = new Date(now.getFullYear(),now.getMonth(),now.getDate());

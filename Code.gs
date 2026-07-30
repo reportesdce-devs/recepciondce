@@ -32,6 +32,7 @@ function doGet(e) {
 function obtenerDatos_() {
   const libro = SpreadsheetApp.getActiveSpreadsheet();
   const ahora = new Date();
+  const zonaHoraria = libro.getSpreadsheetTimeZone();
 
   const anuncios = leerObjetos_(libro.getSheetByName(HOJAS.ANUNCIOS))
     .filter(fila => esActivo_(fila.Activo))
@@ -81,16 +82,23 @@ function obtenerDatos_() {
       return {
         id: texto_(fila.ID),
         title: texto_(fila.Titulo),
-        date: fechaEvento ? fechaEvento.toISOString() : "",
+        date: fechaEvento
+          ? Utilities.formatDate(fechaEvento, zonaHoraria, "yyyy-MM-dd")
+          : "",
         time: horaTexto_(fila.Hora),
         location: texto_(fila.Lugar),
         type: texto_(fila.Tipo) || "Evento",
+        dateValue: fechaEvento ? fechaEvento.getTime() : 0,
         active: true
       };
     })
-    .filter(evento => evento.title && evento.date && new Date(evento.date) >= inicioHoy)
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 8);
+    .filter(evento => evento.title && evento.date && evento.dateValue >= inicioHoy.getTime())
+    .sort((a, b) => a.dateValue - b.dateValue)
+    .slice(0, 8)
+    .map(evento => {
+      delete evento.dateValue;
+      return evento;
+    });
 
   const configuracion = leerConfiguracion_(
     libro.getSheetByName(HOJAS.CONFIGURACION)
