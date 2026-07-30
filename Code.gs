@@ -51,9 +51,9 @@ function obtenerDatos_() {
     .sort((a, b) => a.priority - b.priority);
 
   const mesActual = ahora.getMonth() + 1;
-  const cumpleanos = leerObjetos_(libro.getSheetByName(HOJAS.CUMPLEANOS))
+  const mesSiguiente = mesActual === 12 ? 1 : mesActual + 1;
+  const todosCumpleanos = leerObjetos_(libro.getSheetByName(HOJAS.CUMPLEANOS))
     .filter(fila => esActivo_(fila.Activo))
-    .filter(fila => numero_(fila.Mes, 0) === mesActual)
     .map(fila => ({
       id: texto_(fila.ID),
       name: texto_(fila.Nombre),
@@ -66,6 +66,11 @@ function obtenerDatos_() {
     }))
     .filter(persona => persona.name && persona.day >= 1 && persona.day <= 31)
     .sort((a, b) => a.day - b.day);
+  const cumpleanos = todosCumpleanos
+    .filter(persona => persona.month === mesActual);
+  const proximosCumpleanos = todosCumpleanos
+    .filter(persona => persona.month === mesSiguiente)
+    .slice(0, 3);
 
   const inicioHoy = new Date(ahora);
   inicioHoy.setHours(0, 0, 0, 0);
@@ -96,6 +101,8 @@ function obtenerDatos_() {
     updatedAt: ahora.toISOString(),
     announcements: anuncios,
     birthdays: cumpleanos,
+    nextBirthdays: proximosCumpleanos,
+    nextBirthdayMonth: mesSiguiente,
     events: eventos,
     config: configuracion
   };
@@ -148,7 +155,7 @@ function rangoFechas_(inicio, fin) {
     : "";
   const desde = formato(inicio);
   const hasta = formato(fin);
-  return desde && hasta ? desde + " – " + hasta : desde || hasta || "Vigente";
+  return desde && hasta ? desde + " – " + hasta : desde || hasta || "";
 }
 
 function texto_(valor) {

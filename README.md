@@ -68,6 +68,10 @@ actualización cuando la API responda correctamente.
 - `Color`: color hexadecimal, por ejemplo `#171717`.
 - `Activo`: usa `SI` o `NO`.
 
+No es necesario escribir `Vigente` en `FechaTexto`: la vigencia ya se controla
+con `FechaInicio` y `FechaFin`. Si se escribe esa palabra, la interfaz la oculta;
+las fechas descriptivas concretas sí se muestran.
+
 ### Cumpleanos
 
 - `Tipo`: identifica si se trata de `Personal` o `Alumno`.
@@ -79,6 +83,8 @@ actualización cuando la API responda correctamente.
 Cuando el día y mes coinciden con la fecha actual, el panel cambia
 automáticamente a `¡Felicidades, Nombre!`, indica si es personal o alumno y
 resalta la tarjeta. Si coinciden varias personas, muestra todos los nombres.
+La franja inferior muestra además los tres primeros cumpleaños registrados del
+mes siguiente.
 
 ### Eventos
 
