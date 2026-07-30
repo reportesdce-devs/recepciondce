@@ -108,7 +108,7 @@ button{font:inherit;color:inherit}
 <script>
 const CONFIG = {
   apiUrl: "https://script.google.com/macros/s/AKfycbxxbhGRSqSyJyxVcbf_Hs0cG6bW-dkxyfiwDZW4L40rLbvSCLeR5EBcQn8T11OA96EkAw/exec",
-  refreshMinutes: 5
+  refreshSeconds: 30
 };
 
 const demoData = {
@@ -380,7 +380,8 @@ function loadFromSheets() {
       restartRotation();
       const updated = new Date(payload.updatedAt || Date.now());
       const time = new Intl.DateTimeFormat("es-MX",{hour:"2-digit",minute:"2-digit",hour12:false}).format(updated);
-      $("dataStatus").textContent = `Google Sheets conectado · ${time}`;
+      const apiVersion = safeText(payload.apiVersion, "implementación anterior");
+      $("dataStatus").textContent = `Google Sheets conectado · ${events.length} eventos · ${time} · ${apiVersion}`;
       $("dataStatus").className = "data-status connected";
     } else {
       failConnection();
@@ -390,7 +391,7 @@ function loadFromSheets() {
   };
 
   script.onerror = failConnection;
-  script.src = `${CONFIG.apiUrl}${separator}callback=${encodeURIComponent(callbackName)}&t=${Date.now()}`;
+  script.src = `${CONFIG.apiUrl}${separator}callback=${encodeURIComponent(callbackName)}&t=${Date.now()}&r=${Math.random().toString(36).slice(2)}`;
   document.head.appendChild(script);
 }
 
@@ -401,7 +402,7 @@ tick();
 restartRotation();
 setInterval(tick, 1000);
 loadFromSheets();
-setInterval(loadFromSheets, CONFIG.refreshMinutes * 60 * 1000);
+setInterval(loadFromSheets, CONFIG.refreshSeconds * 1000);
 
 </script>
 </body>

@@ -98,6 +98,7 @@ function obtenerDatos_() {
 
   return {
     ok: true,
+    apiVersion: "eventos-v3",
     updatedAt: ahora.toISOString(),
     announcements: anuncios,
     birthdays: cumpleanos,
