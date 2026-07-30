@@ -1,7 +1,7 @@
 # HMI DCE — instalación manual
 
 Este paquete publica una pantalla informativa estática en GitHub Pages y toma
-anuncios y cumpleaños desde un Google Sheets editable.
+anuncios, cumpleaños y próximos eventos desde un Google Sheets editable.
 
 ## Archivos
 
@@ -16,7 +16,8 @@ anuncios y cumpleaños desde un Google Sheets editable.
 3. En `Anuncios`, edita o agrega registros. Usa `SI` en `Activo`.
 4. En `Cumpleanos`, captura día y mes como números y selecciona `Personal` o
    `Alumno` en la columna `Tipo`.
-5. No cambies los nombres de las pestañas ni de los encabezados.
+5. En `Eventos`, captura título, fecha, hora, lugar, tipo y estado.
+6. No cambies los nombres de las pestañas ni de los encabezados.
 
 ## 2. Publicar la API
 
@@ -78,6 +79,16 @@ actualización cuando la API responda correctamente.
 Cuando el día y mes coinciden con la fecha actual, el panel cambia
 automáticamente a `¡Felicidades, Nombre!`, indica si es personal o alumno y
 resalta la tarjeta. Si coinciden varias personas, muestra todos los nombres.
+
+### Eventos
+
+- `Fecha`: fecha real del evento; los eventos anteriores dejan de mostrarse.
+- `Hora`: texto con formato `HH:MM`.
+- `Lugar`: ubicación visible en la tarjeta.
+- `Tipo`: por ejemplo `Alumnos`, `Académico` o `Personal`.
+- `Activo`: usa `SI` o `NO`.
+
+La HMI muestra automáticamente los tres eventos futuros más cercanos.
 
 El QR permanece enlazado a:
 https://reportesdce-devs.github.io/registro-atencion-alumnos/

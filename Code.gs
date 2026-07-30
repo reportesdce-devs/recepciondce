@@ -6,6 +6,7 @@
 const HOJAS = {
   ANUNCIOS: "Anuncios",
   CUMPLEANOS: "Cumpleanos",
+  EVENTOS: "Eventos",
   CONFIGURACION: "Configuracion"
 };
 
@@ -66,6 +67,26 @@ function obtenerDatos_() {
     .filter(persona => persona.name && persona.day >= 1 && persona.day <= 31)
     .sort((a, b) => a.day - b.day);
 
+  const inicioHoy = new Date(ahora);
+  inicioHoy.setHours(0, 0, 0, 0);
+  const eventos = leerObjetos_(libro.getSheetByName(HOJAS.EVENTOS))
+    .filter(fila => esActivo_(fila.Activo))
+    .map(fila => {
+      const fechaEvento = fecha_(fila.Fecha, false);
+      return {
+        id: texto_(fila.ID),
+        title: texto_(fila.Titulo),
+        date: fechaEvento ? fechaEvento.toISOString() : "",
+        time: horaTexto_(fila.Hora),
+        location: texto_(fila.Lugar),
+        type: texto_(fila.Tipo) || "Evento",
+        active: true
+      };
+    })
+    .filter(evento => evento.title && evento.date && new Date(evento.date) >= inicioHoy)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 8);
+
   const configuracion = leerConfiguracion_(
     libro.getSheetByName(HOJAS.CONFIGURACION)
   );
@@ -75,6 +96,7 @@ function obtenerDatos_() {
     updatedAt: ahora.toISOString(),
     announcements: anuncios,
     birthdays: cumpleanos,
+    events: eventos,
     config: configuracion
   };
 }
@@ -138,6 +160,18 @@ function numero_(valor, respaldo) {
   return Number.isFinite(numero) ? numero : respaldo;
 }
 
+function horaTexto_(valor) {
+  if (!valor) return "";
+  if (valor instanceof Date && !isNaN(valor.getTime())) {
+    return Utilities.formatDate(
+      valor,
+      Session.getScriptTimeZone() || "America/Monterrey",
+      "HH:mm"
+    );
+  }
+  return texto_(valor);
+}
+
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu("HMI DCE")
@@ -150,7 +184,8 @@ function probarLectura() {
   SpreadsheetApp.getUi().alert(
     "HMI DCE",
     "Anuncios vigentes: " + datos.announcements.length +
-      "\nCumpleaños del mes: " + datos.birthdays.length,
+      "\nCumpleaños del mes: " + datos.birthdays.length +
+      "\nPróximos eventos: " + datos.events.length,
     SpreadsheetApp.getUi().ButtonSet.OK
   );
 }
