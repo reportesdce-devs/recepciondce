@@ -11,7 +11,16 @@ const HOJAS = {
 };
 
 function doGet(e) {
-  const datos = obtenerDatos_();
+  let datos;
+  try {
+    datos = obtenerDatos_();
+  } catch (error) {
+    datos = {
+      ok: false,
+      updatedAt: new Date().toISOString(),
+      error: error && error.message ? error.message : String(error)
+    };
+  }
   const requestedCallback = e && e.parameter && e.parameter.callback;
   const callback = /^[A-Za-z_$][0-9A-Za-z_$]*$/.test(requestedCallback || "")
     ? requestedCallback
@@ -32,7 +41,12 @@ function doGet(e) {
 function obtenerDatos_() {
   const libro = SpreadsheetApp.getActiveSpreadsheet();
   const ahora = new Date();
-  const zonaHoraria = libro.getSpreadsheetTimeZone();
+  const faltantes = Object.keys(HOJAS)
+    .map(clave => HOJAS[clave])
+    .filter(nombre => !libro.getSheetByName(nombre));
+  if (faltantes.length) {
+    throw new Error("Faltan las hojas: " + faltantes.join(", "));
+  }
 
   const anuncios = leerObjetos_(libro.getSheetByName(HOJAS.ANUNCIOS))
     .filter(fila => esActivo_(fila.Activo))
@@ -52,9 +66,9 @@ function obtenerDatos_() {
     .sort((a, b) => a.priority - b.priority);
 
   const mesActual = ahora.getMonth() + 1;
-  const mesSiguiente = mesActual === 12 ? 1 : mesActual + 1;
-  const todosCumpleanos = leerObjetos_(libro.getSheetByName(HOJAS.CUMPLEANOS))
+  const cumpleanos = leerObjetos_(libro.getSheetByName(HOJAS.CUMPLEANOS))
     .filter(fila => esActivo_(fila.Activo))
+    .filter(fila => numero_(fila.Mes, 0) === mesActual)
     .map(fila => ({
       id: texto_(fila.ID),
       name: texto_(fila.Nombre),
@@ -67,29 +81,25 @@ function obtenerDatos_() {
     }))
     .filter(persona => persona.name && persona.day >= 1 && persona.day <= 31)
     .sort((a, b) => a.day - b.day);
-  const cumpleanos = todosCumpleanos
-    .filter(persona => persona.month === mesActual);
-  const proximosCumpleanos = todosCumpleanos
-    .filter(persona => persona.month === mesSiguiente)
-    .slice(0, 3);
 
-  const hoyTexto = Utilities.formatDate(ahora, zonaHoraria, "yyyy-MM-dd");
+  const inicioHoy = new Date(ahora);
+  inicioHoy.setHours(0, 0, 0, 0);
   const eventos = leerObjetos_(libro.getSheetByName(HOJAS.EVENTOS))
     .filter(fila => esActivo_(fila.Activo))
     .map(fila => {
-      const fechaEvento = fechaTextoLocal_(fila.Fecha, zonaHoraria);
+      const fechaEvento = fecha_(fila.Fecha, false);
       return {
         id: texto_(fila.ID),
         title: texto_(fila.Titulo),
-        date: fechaEvento,
+        date: fechaEvento ? fechaClave_(fechaEvento) : "",
         time: horaTexto_(fila.Hora),
         location: texto_(fila.Lugar),
         type: texto_(fila.Tipo) || "Evento",
         active: true
       };
     })
-    .filter(evento => evento.title && evento.date && evento.date >= hoyTexto)
-    .sort((a, b) => a.date.localeCompare(b.date))
+    .filter(evento => evento.title && evento.date && new Date(evento.date) >= inicioHoy)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
     .slice(0, 8);
 
   const configuracion = leerConfiguracion_(
@@ -98,12 +108,9 @@ function obtenerDatos_() {
 
   return {
     ok: true,
-    apiVersion: "eventos-v3",
     updatedAt: ahora.toISOString(),
     announcements: anuncios,
     birthdays: cumpleanos,
-    nextBirthdays: proximosCumpleanos,
-    nextBirthdayMonth: mesSiguiente,
     events: eventos,
     config: configuracion
   };
@@ -149,34 +156,6 @@ function fecha_(valor, finDelDia) {
   return fecha;
 }
 
-/**
- * Conserva exactamente el día escrito en Sheets y devuelve YYYY-MM-DD.
- * Evita que la conversión UTC cambie el día en la pantalla.
- */
-function fechaTextoLocal_(valor, zonaHoraria) {
-  if (!valor) return "";
-
-  if (valor instanceof Date && !isNaN(valor.getTime())) {
-    return Utilities.formatDate(valor, zonaHoraria, "yyyy-MM-dd");
-  }
-
-  const texto = texto_(valor);
-  const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if (iso) return iso[1] + "-" + iso[2] + "-" + iso[3];
-
-  const latino = texto.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
-  if (latino) {
-    return latino[3] + "-" +
-      String(Number(latino[2])).padStart(2, "0") + "-" +
-      String(Number(latino[1])).padStart(2, "0");
-  }
-
-  const fecha = new Date(valor);
-  return isNaN(fecha.getTime())
-    ? ""
-    : Utilities.formatDate(fecha, zonaHoraria, "yyyy-MM-dd");
-}
-
 function rangoFechas_(inicio, fin) {
   const zona = Session.getScriptTimeZone() || "America/Monterrey";
   const formato = fecha => fecha
@@ -184,7 +163,15 @@ function rangoFechas_(inicio, fin) {
     : "";
   const desde = formato(inicio);
   const hasta = formato(fin);
-  return desde && hasta ? desde + " – " + hasta : desde || hasta || "";
+  return desde && hasta ? desde + " – " + hasta : desde || hasta || "Vigente";
+}
+
+function fechaClave_(fecha) {
+  return Utilities.formatDate(
+    fecha,
+    Session.getScriptTimeZone() || "America/Monterrey",
+    "yyyy-MM-dd"
+  );
 }
 
 function texto_(valor) {
@@ -224,4 +211,10 @@ function probarLectura() {
       "\nPróximos eventos: " + datos.events.length,
     SpreadsheetApp.getUi().ButtonSet.OK
   );
+}
+
+function probarRespuestaWeb() {
+  const datos = obtenerDatos_();
+  Logger.log(JSON.stringify(datos, null, 2));
+  return datos;
 }

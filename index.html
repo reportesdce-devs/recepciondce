@@ -32,12 +32,11 @@ button{font:inherit;color:inherit}
 .announcement-foot{padding:0 clamp(20px,2vw,34px);border-top:1px solid #eee;display:flex;align-items:center;justify-content:space-between}
 .dots{display:flex;gap:8px}.dots button{width:9px;height:9px;padding:0;border:0;border-radius:10px;background:#cfcfcf;cursor:pointer}.dots button.selected{width:40px;background:#171717}
 .arrows{display:flex;gap:8px}.arrows button{width:clamp(38px,3vw,48px);height:clamp(38px,3vw,48px);border:1px solid var(--line);border-radius:10px;background:#fff;font-size:19px;cursor:pointer}
-.birthdays{display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.birthdays{display:grid;grid-template-rows:auto minmax(0,1fr)}
 .community-column{min-width:0;min-height:0;display:grid;grid-template-rows:minmax(0,1.12fr) minmax(220px,.72fr);gap:clamp(14px,1.4vw,24px)}
 .birthday-list{min-height:0;padding:0 clamp(16px,1.5vw,24px);display:grid;align-content:stretch}
-.next-birthdays{padding:10px clamp(16px,1.5vw,24px) 12px;border-top:1px solid #eee;background:#fafafa}.next-birthdays-head{margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:clamp(10px,.72vw,12px);font-weight:900;text-transform:uppercase;letter-spacing:.04em}.next-birthdays-head b{color:var(--muted)}.next-birthday-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.next-person{min-width:0;padding:8px;border:1px solid #e5e5e5;border-radius:10px;background:#fff;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px}.next-person time{width:31px;height:31px;border-radius:9px;background:#171717;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:900}.next-person span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(9px,.68vw,12px);font-weight:800}.next-empty{grid-column:1/-1;color:var(--muted);font-size:11px}
 .person{min-height:0;border-top:1px solid #eee;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(10px,1vw,16px)}
-.person:first-child{border-top:0}.avatar{width:clamp(39px,3.1vw,54px);height:clamp(39px,3.1vw,54px);border-radius:50%;background:#171717;color:#fff;display:grid;place-items:center;font-size:clamp(10px,.8vw,14px);font-weight:900}
+.person:first-child{border-top:0}.avatar{width:clamp(39px,3.1vw,54px);height:clamp(39px,3.1vw,54px);border-radius:50%;background:#171717;color:#fff;display:grid;place-items:center;overflow:hidden;font-size:clamp(10px,.8vw,14px);font-weight:900}.avatar img{width:100%;height:100%;display:block;object-fit:cover}
 .birthdays.celebrating{border-color:#d5a72f;box-shadow:0 10px 30px rgba(181,132,0,.16)}.birthdays.celebrating .card-head{height:clamp(100px,12vh,126px);padding-top:10px;padding-bottom:10px;background:linear-gradient(120deg,#fff8d8,#fff)}.birthdays.celebrating .card-head h2{max-width:310px;font-size:clamp(19px,1.3vw,24px);line-height:1.08;letter-spacing:-.025em}.birthdays.celebrating .card-head p{line-height:1.25}.birthdays.celebrating .tag{background:#171717;color:#fff}.person.today-birthday{margin:4px -8px;padding:0 8px;border:1px solid #d5a72f!important;border-radius:12px;background:#fff8d8}.person.today-birthday .avatar{background:#b47b00}.person.today-birthday .birthday-date strong{color:#9a6800}
 .person-info{min-width:0}.person-info strong,.person-info span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.person-info strong{font-size:clamp(12px,.98vw,17px)}.person-info span{margin-top:4px;color:var(--muted);font-size:clamp(10px,.72vw,13px)}
 .birthday-date{text-align:center}.birthday-date strong,.birthday-date span{display:block}.birthday-date strong{font-size:clamp(19px,1.6vw,28px)}.birthday-date span{color:var(--muted);font-size:clamp(8px,.65vw,11px);font-weight:900;text-transform:uppercase}
@@ -68,11 +67,11 @@ button{font:inherit;color:inherit}
           <span class="category" id="category">Comunidad DCE</span>
           <h2 id="announcementTitle">Bienvenidos a un nuevo ciclo de innovación</h2>
           <p id="announcementDescription">Consulta los avisos, actividades y celebraciones de la División de Ciencias Exactas.</p>
-          <div class="meta"><span id="announcementDateMeta">▣ <b id="announcementDate">3 de agosto</b></span><span>⌖ <b id="announcementLocation">Edificio de Ciencias Exactas</b></span></div>
+          <div class="meta"><span>▣ <b id="announcementDate">3 de agosto</b></span><span>⌖ <b id="announcementLocation">Edificio de Ciencias Exactas</b></span></div>
         </div>
         <aside class="announcement-panel" aria-label="Resumen del anuncio">
           <div class="panel-icon">◫</div>
-          <div><span id="announcementPanelCategory">Información DCE</span><strong id="announcementPanelDate">Información</strong></div>
+          <div><span id="announcementPanelCategory">Información DCE</span><strong id="announcementPanelDate">Vigente</strong></div>
           <small id="announcementPanelLocation">División de Ciencias Exactas</small>
         </aside>
       </div>
@@ -83,10 +82,6 @@ button{font:inherit;color:inherit}
       <article class="card birthdays" id="birthdayCard">
         <header class="card-head"><div><h2 id="birthdayTitle">Cumpleaños del mes</h2><p id="birthdaySubtitle">Celebramos a nuestra comunidad</p></div><span class="tag" id="month">Mes</span></header>
         <div class="birthday-list" id="birthdayList"></div>
-        <section class="next-birthdays" aria-label="Próximos cumpleaños del siguiente mes">
-          <div class="next-birthdays-head"><span>Próximos 3 cumpleaños</span><b id="nextBirthdayMonth">Siguiente mes</b></div>
-          <div class="next-birthday-list" id="nextBirthdayList"></div>
-        </section>
       </article>
       <article class="card events">
         <header class="card-head"><div><h2>Próximos eventos</h2><p>Agenda de la comunidad DCE</p></div><span class="tag" id="eventCount">0</span></header>
@@ -96,7 +91,7 @@ button{font:inherit;color:inherit}
 
     <article class="card qr-card">
       <div><h2>Registro de visita</h2><p>Escanea el código QR con la cámara de tu teléfono.</p></div>
-      <a class="qr-link" href="https://reportesdce-devs.github.io/registro-atencion-alumnos/" target="_blank" rel="noopener" aria-label="Abrir registro de visita">
+      <a class="qr-link" id="visitQrLink" href="https://reportesdce-devs.github.io/registro-atencion-alumnos/" target="_blank" rel="noopener" aria-label="Abrir registro de visita">
         <svg shape-rendering="crispEdges" viewBox="0 0 41 41"><path fill="#ffffff" d="M0 0h41v41H0z"/><path stroke="#000000" d="M4 4.5h7m2 0h6m1 0h8m2 0h7M4 5.5h1m5 0h1m2 0h1m1 0h5m5 0h1m2 0h1m1 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h2m1 0h2m1 0h2m4 0h5m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h5m4 0h1m4 0h1m1 0h1m1 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h4m6 0h2m1 0h3m2 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m2 0h2m1 0h3m4 0h2m3 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h1m1 0h1m1 0h1m1 0h1m4 0h3M4 12.5h1m1 0h5m2 0h1m2 0h4m1 0h1m1 0h1m2 0h2m2 0h5M6 13.5h1m1 0h2m1 0h1m2 0h1m1 0h2m2 0h1m2 0h3m1 0h1m2 0h2m1 0h2m1 0h1M5 14.5h1m1 0h1m1 0h3m2 0h1m1 0h4m2 0h1m1 0h3m3 0h1m1 0h1m1 0h2M4 15.5h1m1 0h1m4 0h1m1 0h5m1 0h2m3 0h2m1 0h1m1 0h1m2 0h4M4 16.5h1m2 0h5m2 0h1m1 0h1m1 0h4m1 0h1m2 0h4m1 0h3m2 0h1M4 17.5h1m3 0h1m3 0h1m1 0h2m4 0h1m1 0h4m1 0h4m2 0h1m1 0h2M6 18.5h2m1 0h3m2 0h2m2 0h4m2 0h3m2 0h2m1 0h2m1 0h1M4 19.5h1m6 0h2m1 0h1m2 0h1m2 0h1m1 0h6m1 0h2m3 0h1M5 20.5h7m2 0h3m3 0h2m1 0h1m2 0h4m1 0h2m3 0h1M9 21.5h1m1 0h1m6 0h1m1 0h2m1 0h1m1 0h3m1 0h3m1 0h2m1 0h1M4 22.5h1m1 0h2m2 0h3m1 0h1m3 0h3m3 0h3m1 0h1m2 0h2m1 0h2M7 23.5h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h3m1 0h7m1 0h1M8 24.5h1m1 0h3m2 0h1m1 0h1m3 0h1m4 0h1m1 0h2m1 0h3m1 0h2M4 25.5h3m6 0h1m1 0h3m2 0h1m2 0h3m1 0h1m1 0h2m2 0h1m2 0h1M4 26.5h1m1 0h1m2 0h2m2 0h1m1 0h2m1 0h2m1 0h2m1 0h1m3 0h1m4 0h1m1 0h1M4 27.5h1m1 0h4m1 0h1m1 0h1m4 0h1m1 0h1m4 0h4m1 0h1m2 0h3M4 28.5h1m1 0h1m3 0h1m1 0h1m1 0h2m1 0h1m3 0h3m2 0h1m1 0h6m1 0h2M12 29.5h1m2 0h2m3 0h1m1 0h3m2 0h2m3 0h1m1 0h1m1 0h1M4 30.5h7m3 0h3m1 0h3m3 0h1m1 0h3m1 0h1m1 0h1m1 0h1M4 31.5h1m5 0h1m1 0h1m3 0h1m3 0h1m2 0h1m1 0h1m1 0h2m3 0h3m1 0h1M4 32.5h1m1 0h3m1 0h1m1 0h1m1 0h1m3 0h2m1 0h1m4 0h1m1 0h6M4 33.5h1m1 0h3m1 0h1m1 0h7m1 0h6m1 0h3m2 0h1m1 0h3M4 34.5h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h4m2 0h5m1 0h2M4 35.5h1m5 0h1m2 0h8m1 0h2m1 0h1m1 0h1m1 0h1m2 0h3M4 36.5h7m1 0h2m1 0h1m2 0h1m2 0h1m4 0h3m2 0h1m3 0h1"/></svg>
       </a>
       <div class="scan">Escanea para registrarte<span>Atención a coordinadores</span></div>
@@ -108,54 +103,18 @@ button{font:inherit;color:inherit}
 <script>
 const CONFIG = {
   apiUrl: "https://script.google.com/macros/s/AKfycbxxbhGRSqSyJyxVcbf_Hs0cG6bW-dkxyfiwDZW4L40rLbvSCLeR5EBcQn8T11OA96EkAw/exec",
-  refreshSeconds: 30
+  refreshMinutes: 5,
+  cacheKey: "hmiDceLastData"
 };
 
-const demoData = {
-  announcements: [
-    {category:"Comunidad DCE",title:"Bienvenidos a un nuevo ciclo de innovación",description:"Consulta los avisos, actividades y celebraciones de la División de Ciencias Exactas.",date:"3 de agosto",location:"Edificio de Ciencias Exactas",accent:"#171717"},
-    {category:"Actividad académica",title:"Semana de Ciencia, Tecnología e Innovación",description:"Conferencias, demostraciones y proyectos desarrollados por nuestra comunidad.",date:"12 al 16 de agosto",location:"OpenLab · DCE",accent:"#315c49"},
-    {category:"Aviso importante",title:"Actualización de horarios de laboratorios",description:"Los nuevos horarios de acceso y préstamo de equipo ya están disponibles.",date:"",location:"Coordinación de laboratorios",accent:"#8a4b37"}
-  ],
-  birthdays: [
-    {id:"L03",name:"Carlos Porfirio Muñoz Villanueva",type:"Personal",role:"",day:20,month:7}
-  ],
-  birthdayCatalog: [
-    {id:"IQ03",name:"Marianela Calzada Torres",type:"Personal",role:"",day:8,month:1},
-    {id:"L02",name:"Daniela Graciela Ramos de la Torre",type:"Personal",role:"",day:7,month:2},
-    {id:"II01",name:"Alfonso Muñíz Perales",type:"Personal",role:"Coordinador II",day:15,month:2},
-    {id:"CB02",name:"Fabiola Duque García",type:"Personal",role:"",day:26,month:2},
-    {id:"CB03",name:"Fernando Pérez Escobar",type:"Personal",role:"",day:29,month:4},
-    {id:"IQ02",name:"Beatriz Alicia Toledo Martínez",type:"Personal",role:"",day:19,month:5},
-    {id:"II02",name:"Sergio Antonio Padilla Torres",type:"Personal",role:"",day:21,month:5},
-    {id:"IM02",name:"José Luis Horak Romo",type:"Personal",role:"",day:23,month:6},
-    {id:"L03",name:"Carlos Porfirio Muñoz Villanueva",type:"Personal",role:"",day:20,month:7},
-    {id:"IS02",name:"Víctor Guillermo Asad Zetina",type:"Personal",role:"",day:8,month:8},
-    {id:"D01",name:"Cristian Edgardo Hernández Estrella",type:"Personal",role:"Director División",day:23,month:8},
-    {id:"IQ01",name:"Carla Natalia Robledo Melo",type:"Personal",role:"Coordinadora IQ",day:8,month:9},
-    {id:"IM04",name:"Óscar Martínez Hernández",type:"Personal",role:"",day:28,month:9},
-    {id:"II03",name:"Rubén Castelán Paz",type:"Personal",role:"",day:29,month:9},
-    {id:"L04",name:"Rosa María Saldaña Juárez",type:"Personal",role:"",day:5,month:10},
-    {id:"IM03",name:"Rafael Gea Díaz",type:"Personal",role:"",day:11,month:10},
-    {id:"CB01",name:"María Teresa Morales Niño",type:"Personal",role:"Coordinadora CB",day:15,month:10},
-    {id:"D02",name:"Nohemí Velazco del Ángel",type:"Personal",role:"",day:15,month:10},
-    {id:"L01",name:"Mildred Alethia Ventura Rechy",type:"Personal",role:"",day:18,month:10},
-    {id:"IS03",name:"Miguel Ángel García Chávarro",type:"Personal",role:"",day:15,month:11},
-    {id:"IS01",name:"Alexandro Barrón Guajardo",type:"Personal",role:"Coordinador ISND",day:6,month:12},
-    {id:"IM01",name:"Josué Helí Jiménez Arteaga",type:"Personal",role:"Coordinador IM",day:26,month:12}
-  ],
-  events: []
-};
-
-let announcements = demoData.announcements;
-let birthdays = demoData.birthdays;
-let nextBirthdays = demoData.birthdayCatalog.filter(person => person.month === ((new Date().getMonth() + 1) % 12) + 1).slice(0,3);
+let announcements = [];
+let birthdays = [];
 let events = [];
 let slide = 0;
 let rotationTimer;
+let refreshTimer;
 const $ = id => document.getElementById(id);
 const monthName = () => new Intl.DateTimeFormat("es-MX",{month:"long"}).format(new Date()).replace(/^./,x=>x.toUpperCase());
-const monthNameFor = month => new Intl.DateTimeFormat("es-MX",{month:"long"}).format(new Date(2026,Number(month)-1,1)).replace(/^./,x=>x.toUpperCase());
 const initials = name => name.replace(/^(Dra?\.|Mtro?\.|Ing\.)\s+/i,"").split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();
 
 function safeText(value, fallback = "") {
@@ -172,18 +131,57 @@ function escapeHtml(value) {
   })[character]);
 }
 
-function visibleAnnouncementDate(value) {
-  const text = safeText(value).trim();
-  return /^(vigente|activo)$/i.test(text) ? "" : text;
+function parseEventDate(value) {
+  const match = safeText(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (match) {
+    return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  }
+  return new Date(value);
 }
 
-function parseEventDate(value) {
-  const text = safeText(value).trim();
-  const dateOnly = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if (dateOnly) {
-    return new Date(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]));
+function isSafePublicUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:";
+  } catch (_) {
+    return false;
   }
-  return new Date(text);
+}
+
+function applyRemoteConfig(config = {}) {
+  const minutes = Number(config.actualizacion_minutos);
+  if (Number.isFinite(minutes) && minutes >= 1 && minutes <= 1440) {
+    CONFIG.refreshMinutes = minutes;
+  }
+  if (isSafePublicUrl(config.qr_visitas)) {
+    $("visitQrLink").href = config.qr_visitas;
+  }
+  clearInterval(refreshTimer);
+  refreshTimer = setInterval(loadFromSheets, CONFIG.refreshMinutes * 60 * 1000);
+}
+
+function applyPayload(payload, saveCache) {
+  announcements = Array.isArray(payload.announcements) ? payload.announcements : [];
+  birthdays = Array.isArray(payload.birthdays) ? payload.birthdays : [];
+  events = Array.isArray(payload.events) ? payload.events : [];
+  applyRemoteConfig(payload.config || {});
+  renderAll();
+  if (saveCache) {
+    try {
+      localStorage.setItem(CONFIG.cacheKey, JSON.stringify(payload));
+    } catch (_) {}
+  }
+}
+
+function restoreCachedData() {
+  try {
+    const cached = JSON.parse(localStorage.getItem(CONFIG.cacheKey) || "null");
+    if (cached && cached.ok) {
+      applyPayload(cached, false);
+      return true;
+    }
+  } catch (_) {}
+  return false;
 }
 
 function renderAnnouncement() {
@@ -192,8 +190,7 @@ function renderAnnouncement() {
     $("category").textContent = "DCE";
     $("announcementTitle").textContent = "Sin anuncios vigentes";
     $("announcementDescription").textContent = "La información se actualizará automáticamente.";
-    $("announcementDateMeta").style.display = "none";
-    $("announcementDate").textContent = "";
+    $("announcementDate").textContent = "—";
     $("announcementLocation").textContent = "—";
     $("announcementPanelCategory").textContent = "Información DCE";
     $("announcementPanelDate").textContent = "Sin avisos";
@@ -206,12 +203,10 @@ function renderAnnouncement() {
   $("category").textContent = safeText(a.category, "Aviso");
   $("announcementTitle").textContent = safeText(a.title);
   $("announcementDescription").textContent = safeText(a.description);
-  const visibleDate = visibleAnnouncementDate(a.date);
-  $("announcementDateMeta").style.display = visibleDate ? "" : "none";
-  $("announcementDate").textContent = visibleDate;
+  $("announcementDate").textContent = safeText(a.date, "Vigente");
   $("announcementLocation").textContent = safeText(a.location, "DCE");
   $("announcementPanelCategory").textContent = safeText(a.category, "Información DCE");
-  $("announcementPanelDate").textContent = visibleDate || "Información";
+  $("announcementPanelDate").textContent = safeText(a.date, "Vigente");
   $("announcementPanelLocation").textContent = safeText(a.location, "División de Ciencias Exactas");
   $("slideCount").textContent = `${slide + 1} de ${announcements.length}`;
   $("dots").innerHTML = announcements.map((_, i) =>
@@ -233,12 +228,8 @@ function move(direction) {
 }
 
 function restartRotation() {
-  clearTimeout(rotationTimer);
-  if (announcements.length < 2) return;
-  rotationTimer = setTimeout(function rotateAnnouncement() {
-    move(1);
-    rotationTimer = setTimeout(rotateAnnouncement, 8000);
-  }, 8000);
+  clearInterval(rotationTimer);
+  rotationTimer = setInterval(() => move(1), 8000);
 }
 
 function renderBirthdays() {
@@ -266,30 +257,23 @@ function renderBirthdays() {
     const aToday = Number(a.day) === currentDay ? 0 : 1;
     const bToday = Number(b.day) === currentDay ? 0 : 1;
     return aToday - bToday || Number(a.day) - Number(b.day);
-  }).slice(0, 3);
+  }).slice(0, 4);
   $("birthdayList").style.gridTemplateRows = `repeat(${Math.max(items.length, 1)},1fr)`;
   $("birthdayList").innerHTML = items.length
     ? items.map(person => {
       const personKey = safeText(person.id) || safeText(person.name);
       const isToday = celebrantIds.has(personKey);
       const detail = [safeText(person.type), safeText(person.role, "Comunidad DCE")].filter(Boolean).join(" · ");
+      const avatar = isSafePublicUrl(person.photo)
+        ? `<img src="${escapeHtml(person.photo)}" alt="">`
+        : escapeHtml(initials(safeText(person.name, "DCE")));
       return `<div class="person ${isToday ? "today-birthday" : ""}">
-        <div class="avatar">${escapeHtml(initials(safeText(person.name, "DCE")))}</div>
+        <div class="avatar">${avatar}</div>
         <div class="person-info"><strong>${escapeHtml(person.name)}</strong><span>${escapeHtml(detail)}</span></div>
         <div class="birthday-date"><strong>${String(person.day).padStart(2,"0")}</strong><span>${month.slice(0,3)}</span></div>
       </div>`;
     }).join("")
     : `<div class="empty">No hay cumpleaños registrados este mes.</div>`;
-
-  const nextMonthNumber = currentMonth === 12 ? 1 : currentMonth + 1;
-  $("nextBirthdayMonth").textContent = monthNameFor(nextMonthNumber);
-  const upcoming = [...nextBirthdays].sort((a,b) => Number(a.day) - Number(b.day)).slice(0,3);
-  $("nextBirthdayList").innerHTML = upcoming.length
-    ? upcoming.map(person => `<div class="next-person">
-        <time datetime="${String(person.month || nextMonthNumber).padStart(2,"0")}-${String(person.day).padStart(2,"0")}">${String(person.day).padStart(2,"0")}</time>
-        <span title="${escapeHtml(person.name)}">${escapeHtml(person.name)}</span>
-      </div>`).join("")
-    : `<div class="next-empty">Sin cumpleaños registrados para ${escapeHtml(monthNameFor(nextMonthNumber))}.</div>`;
 }
 
 function renderEvents() {
@@ -345,43 +329,30 @@ function loadFromSheets() {
   const separator = CONFIG.apiUrl.includes("?") ? "&" : "?";
   $("dataStatus").textContent = "Actualizando desde Google Sheets…";
   $("dataStatus").className = "data-status";
+  let completed = false;
   const timeout = setTimeout(() => failConnection(), 12000);
 
   function cleanup() {
+    if (completed) return;
+    completed = true;
     clearTimeout(timeout);
     delete window[callbackName];
     script.remove();
   }
 
   function failConnection() {
-    $("dataStatus").textContent = "Sin conexión · mostrando últimos datos disponibles";
+    if (completed) return;
+    $("dataStatus").textContent = "Sin conexión · conservando la última actualización";
     $("dataStatus").className = "data-status error";
     cleanup();
   }
 
   window[callbackName] = payload => {
     if (payload && payload.ok) {
-      announcements = Array.isArray(payload.announcements) && payload.announcements.length
-        ? payload.announcements
-        : demoData.announcements;
-      birthdays = Array.isArray(payload.birthdays)
-        ? payload.birthdays
-        : demoData.birthdays;
-      nextBirthdays = Array.isArray(payload.nextBirthdays) && payload.nextBirthdays.length
-        ? payload.nextBirthdays
-        : demoData.birthdayCatalog
-            .filter(person => person.month === ((new Date().getMonth() + 1) % 12) + 1)
-            .sort((a,b) => Number(a.day) - Number(b.day))
-            .slice(0,3);
-      // Una respuesta válida de Sheets siempre manda la lista definitiva.
-      // Si está vacía, se muestra vacía; nunca se sustituyen fechas con ejemplos.
-      events = Array.isArray(payload.events) ? payload.events : [];
-      renderAll();
-      restartRotation();
+      applyPayload(payload, true);
       const updated = new Date(payload.updatedAt || Date.now());
       const time = new Intl.DateTimeFormat("es-MX",{hour:"2-digit",minute:"2-digit",hour12:false}).format(updated);
-      const apiVersion = safeText(payload.apiVersion, "implementación anterior");
-      $("dataStatus").textContent = `Google Sheets conectado · ${events.length} eventos · ${time} · ${apiVersion}`;
+      $("dataStatus").textContent = `Google Sheets conectado · ${time}`;
       $("dataStatus").className = "data-status connected";
     } else {
       failConnection();
@@ -391,7 +362,7 @@ function loadFromSheets() {
   };
 
   script.onerror = failConnection;
-  script.src = `${CONFIG.apiUrl}${separator}callback=${encodeURIComponent(callbackName)}&t=${Date.now()}&r=${Math.random().toString(36).slice(2)}`;
+  script.src = `${CONFIG.apiUrl}${separator}callback=${encodeURIComponent(callbackName)}&t=${Date.now()}`;
   document.head.appendChild(script);
 }
 
@@ -401,8 +372,9 @@ renderAll();
 tick();
 restartRotation();
 setInterval(tick, 1000);
+restoreCachedData();
 loadFromSheets();
-setInterval(loadFromSheets, CONFIG.refreshSeconds * 1000);
+applyRemoteConfig();
 
 </script>
 </body>
