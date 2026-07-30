@@ -118,15 +118,31 @@ const demoData = {
     {category:"Aviso importante",title:"Actualización de horarios de laboratorios",description:"Los nuevos horarios de acceso y préstamo de equipo ya están disponibles.",date:"",location:"Coordinación de laboratorios",accent:"#8a4b37"}
   ],
   birthdays: [
-    {name:"Dra. Laura Hernández",type:"Personal",role:"Profesora",day:4},
-    {name:"Mtro. Carlos Ramírez",type:"Personal",role:"Coordinador académico",day:12},
-    {name:"Ing. Sofía Martínez",type:"Personal",role:"Responsable de laboratorio",day:21},
-    {name:"Dr. Miguel García",type:"Personal",role:"Profesor",day:28}
+    {id:"L03",name:"Carlos Porfirio Muñoz Villanueva",type:"Personal",role:"",day:20,month:7}
   ],
-  nextBirthdays: [
-    {name:"Mtra. Ana Torres",type:"Personal",role:"Docente",day:3,month:8},
-    {name:"José Luis Méndez",type:"Alumno",role:"Estudiante",day:11,month:8},
-    {name:"Dra. Elena Ruiz",type:"Personal",role:"Investigadora",day:19,month:8}
+  birthdayCatalog: [
+    {id:"IQ03",name:"Marianela Calzada Torres",type:"Personal",role:"",day:8,month:1},
+    {id:"L02",name:"Daniela Graciela Ramos de la Torre",type:"Personal",role:"",day:7,month:2},
+    {id:"II01",name:"Alfonso Muñíz Perales",type:"Personal",role:"Coordinador II",day:15,month:2},
+    {id:"CB02",name:"Fabiola Duque García",type:"Personal",role:"",day:26,month:2},
+    {id:"CB03",name:"Fernando Pérez Escobar",type:"Personal",role:"",day:29,month:4},
+    {id:"IQ02",name:"Beatriz Alicia Toledo Martínez",type:"Personal",role:"",day:19,month:5},
+    {id:"II02",name:"Sergio Antonio Padilla Torres",type:"Personal",role:"",day:21,month:5},
+    {id:"IM02",name:"José Luis Horak Romo",type:"Personal",role:"",day:23,month:6},
+    {id:"L03",name:"Carlos Porfirio Muñoz Villanueva",type:"Personal",role:"",day:20,month:7},
+    {id:"IS02",name:"Víctor Guillermo Asad Zetina",type:"Personal",role:"",day:8,month:8},
+    {id:"D01",name:"Cristian Edgardo Hernández Estrella",type:"Personal",role:"Director División",day:23,month:8},
+    {id:"IQ01",name:"Carla Natalia Robledo Melo",type:"Personal",role:"Coordinadora IQ",day:8,month:9},
+    {id:"IM04",name:"Óscar Martínez Hernández",type:"Personal",role:"",day:28,month:9},
+    {id:"II03",name:"Rubén Castelán Paz",type:"Personal",role:"",day:29,month:9},
+    {id:"L04",name:"Rosa María Saldaña Juárez",type:"Personal",role:"",day:5,month:10},
+    {id:"IM03",name:"Rafael Gea Díaz",type:"Personal",role:"",day:11,month:10},
+    {id:"CB01",name:"María Teresa Morales Niño",type:"Personal",role:"Coordinadora CB",day:15,month:10},
+    {id:"D02",name:"Nohemí Velazco del Ángel",type:"Personal",role:"",day:15,month:10},
+    {id:"L01",name:"Mildred Alethia Ventura Rechy",type:"Personal",role:"",day:18,month:10},
+    {id:"IS03",name:"Miguel Ángel García Chávarro",type:"Personal",role:"",day:15,month:11},
+    {id:"IS01",name:"Alexandro Barrón Guajardo",type:"Personal",role:"Coordinador ISND",day:6,month:12},
+    {id:"IM01",name:"Josué Helí Jiménez Arteaga",type:"Personal",role:"Coordinador IM",day:26,month:12}
   ],
   events: [
     {id:"E001",title:"Bienvenida de Integración Universitaria",date:"2026-08-03T15:00:00.000Z",time:"09:00",location:"Auditorio",type:"Alumnos"},
@@ -137,7 +153,7 @@ const demoData = {
 
 let announcements = demoData.announcements;
 let birthdays = demoData.birthdays;
-let nextBirthdays = demoData.nextBirthdays;
+let nextBirthdays = demoData.birthdayCatalog.filter(person => person.month === ((new Date().getMonth() + 1) % 12) + 1).slice(0,3);
 let events = demoData.events;
 let slide = 0;
 let rotationTimer;
@@ -338,7 +354,12 @@ function loadFromSheets() {
     if (payload && payload.ok) {
       announcements = Array.isArray(payload.announcements) ? payload.announcements : [];
       birthdays = Array.isArray(payload.birthdays) ? payload.birthdays : [];
-      nextBirthdays = Array.isArray(payload.nextBirthdays) ? payload.nextBirthdays : [];
+      nextBirthdays = Array.isArray(payload.nextBirthdays) && payload.nextBirthdays.length
+        ? payload.nextBirthdays
+        : demoData.birthdayCatalog
+            .filter(person => person.month === ((new Date().getMonth() + 1) % 12) + 1)
+            .sort((a,b) => Number(a.day) - Number(b.day))
+            .slice(0,3);
       events = Array.isArray(payload.events) ? payload.events : [];
       renderAll();
       const updated = new Date(payload.updatedAt || Date.now());
