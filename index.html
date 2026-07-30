@@ -228,8 +228,12 @@ function move(direction) {
 }
 
 function restartRotation() {
-  clearInterval(rotationTimer);
-  rotationTimer = setInterval(() => move(1), 8000);
+  clearTimeout(rotationTimer);
+  if (announcements.length < 2) return;
+  rotationTimer = setTimeout(function rotateAnnouncement() {
+    move(1);
+    rotationTimer = setTimeout(rotateAnnouncement, 8000);
+  }, 8000);
 }
 
 function renderBirthdays() {
@@ -352,16 +356,23 @@ function loadFromSheets() {
 
   window[callbackName] = payload => {
     if (payload && payload.ok) {
-      announcements = Array.isArray(payload.announcements) ? payload.announcements : [];
-      birthdays = Array.isArray(payload.birthdays) ? payload.birthdays : [];
+      announcements = Array.isArray(payload.announcements) && payload.announcements.length
+        ? payload.announcements
+        : demoData.announcements;
+      birthdays = Array.isArray(payload.birthdays)
+        ? payload.birthdays
+        : demoData.birthdays;
       nextBirthdays = Array.isArray(payload.nextBirthdays) && payload.nextBirthdays.length
         ? payload.nextBirthdays
         : demoData.birthdayCatalog
             .filter(person => person.month === ((new Date().getMonth() + 1) % 12) + 1)
             .sort((a,b) => Number(a.day) - Number(b.day))
             .slice(0,3);
-      events = Array.isArray(payload.events) ? payload.events : [];
+      events = Array.isArray(payload.events) && payload.events.length
+        ? payload.events
+        : demoData.events;
       renderAll();
+      restartRotation();
       const updated = new Date(payload.updatedAt || Date.now());
       const time = new Intl.DateTimeFormat("es-MX",{hour:"2-digit",minute:"2-digit",hour12:false}).format(updated);
       $("dataStatus").textContent = `Google Sheets conectado · ${time}`;
